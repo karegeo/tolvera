@@ -6,10 +6,14 @@ TODO: List available output methods for LEDs, rumble, etc.
 import platform
 import os
 
-if platform.system() == 'Darwin':
-    homebrew_lib_path = "/opt/homebrew/lib"
-    current_dyld_library_path = os.environ.get('DYLD_LIBRARY_PATH', '')
-    os.environ['DYLD_LIBRARY_PATH'] = f"{homebrew_lib_path}:{current_dyld_library_path}"
+# Module os have function uname available ony for Unix. On Windows the call of uname leads to error.
+if os.name != 'nt':
+    if os.uname().sysname == 'Darwin':
+        # Setting up the environment variable for the library path
+        homebrew_lib_path = "/opt/homebrew/lib"
+        current_dyld_library_path = os.environ.get('DYLD_LIBRARY_PATH', '')
+        os.environ['DYLD_LIBRARY_PATH'] = f"{homebrew_lib_path}:{current_dyld_library_path}"
+
 
 try:
     from dualsense_controller import DualSenseController, Mapping, UpdateLevel
